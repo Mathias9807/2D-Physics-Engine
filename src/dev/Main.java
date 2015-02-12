@@ -28,12 +28,15 @@ public class Main {
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		
-		World.start(false);
-		Shape s0 		= new ShapeQuad(-1, 1f, 0.5f, 0.5f, 1);
-		s0.velocity.x 	= 0.4f;
-		s0.rotation 	= 45;
-		Shape s1 		= new ShapeQuad(1, 0, 0.5f, 0.5f, 1);
-		s1.velocity.x 	= -0.4f;
+		World.start(true);
+		Shape s0 		= new ShapeQuad(-4, 1f, 0.5f, 0.5f, 1);
+//		s0.velocity.x 	= 2f;
+//		s0.velocity.y 	= 10f;
+//		s0.angMom		= 300f;
+		Shape s1 		= new ShapeQuad(5, 0, 0.5f, 0.5f, 1);
+//		s1.velocity.x 	= -8f;
+//		s1.velocity.y 	= 5f;
+//		s1.angMom		= -200f;
 		
 		World.addBody(s0);
 		World.addBody(s1);
@@ -42,7 +45,7 @@ public class Main {
 	}
 	
 	private void tick(double delta) {
-		/*for (int i = 0; i < World.bodies.size(); i++) {
+		for (int i = 0; i < World.bodies.size(); i++) {
 			Shape s = World.bodies.get(i);
 			Vector2f vec = s.getVertex(0);
 			if (s.getVertexInWorld(0).length() > 2) {
@@ -50,7 +53,7 @@ public class Main {
 						(float) (-s.getVertexInWorld(0).y * 15 * delta)), 
 						new Vector2f(vec.x, vec.y));
 			}
-		}*/
+		}
 		
 		/*if (Mouse.isButtonDown(0)) {
 			Shape s = World.bodies.get((int) (Math.random() * World.bodies.size()));
@@ -64,7 +67,8 @@ public class Main {
 	private void render() {
 		glClear(GL_COLOR_BUFFER_BIT);
 		if (World.collision) glClearColor(1, 1, 1, 0);
-		else glClearColor(0, 0, 0, 0);
+		else glClearColor(0.8f, 0.8f, 0.8f, 0);
+		World.collision = false;
 		glLoadIdentity();
 		
 		for (int i = 0; i < World.bodies.size(); i++) {
@@ -80,7 +84,7 @@ public class Main {
 			glEnd();
 		}
 		
-		/*glColor3d(0, 0, 0);
+		glColor3d(0, 0, 0);
 		glBegin(GL_LINES);
 		{
 			for (int i = 0; i < World.bodies.size(); i++) {
@@ -89,7 +93,7 @@ public class Main {
 						World.bodies.get(i).getVertexInWorld(0).y);
 			}
 		}
-		glEnd();*/
+		glEnd();
 	}
 	
 	private void loop() {

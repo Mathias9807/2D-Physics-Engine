@@ -3,6 +3,8 @@ package physics;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.lwjgl.util.vector.Vector2f.*;
+
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -10,15 +12,15 @@ import dev.Main;
 
 public class World {
 	
-	public static final double GRAVITY_PULL = 9.8;
-	public static final double DAMP 		= 0;
-	public static final double ROT_DAMP 	= 0;
+	public static final double 	GRAVITY_PULL 	= 9.8;
+	public static final double 	DAMP 			= 0.1f;
+	public static final double 	ROT_DAMP 		= 0.1f;
 	
-	private static boolean 		useGravity = false;
+	private static boolean 		useGravity 		= false;
 	
-	public static boolean collision = false;
+	public static boolean 		collision 		= false;
 	
-	public static List<Shape> bodies;
+	public static List<Shape> 	bodies;
 	
 	public static void start(boolean gravity) {
 		useGravity = gravity;
@@ -46,7 +48,11 @@ public class World {
 	}
 	
 	private static void react(Shape s0, Shape s1, Vector3f normal) {
-//		System.out.println("Collision!");
+		collision = true;
+		
+		Vector2f force = sub(s0.origin, s1.origin, null);
+		s0.addForce(force, new Vector2f(0, 0));
+		s1.addForce(force.negate(null), new Vector2f(0, 0));
 		
 		/*s0.velocity.y = -(s0.velocity.y - s1.velocity.y);
 		s1.velocity.y = -(s1.velocity.y - s0.velocity.y);
@@ -83,12 +89,12 @@ public class World {
 		final Vector2f[] a1 = s1.getVerticesInWorld();
 		
 		// Quit-early test. 
-		/*Vector2f earlyN = new Vector2f(s0.origin.x - s1.origin.x, s0.origin.y - s1.origin.y);
+		Vector2f earlyN = new Vector2f(s0.origin.x - s1.origin.x, s0.origin.y - s1.origin.y);
 		if (earlyN.x != 0 || earlyN.y != 0) earlyN.normalise();
 		if (!SATSingleCheck(a0, a1, earlyN).collides) {
 			c.collides = false;
 			return c;
-		}*/
+		}
 		
 		// Set true as the default value. 
 		c.collides = true;
