@@ -8,6 +8,7 @@ import org.lwjgl.opengl.*;
 import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.vector.Vector2f;
 
+import static org.lwjgl.util.vector.Vector2f.*;
 import physics.*;
 
 public class Main {
@@ -38,6 +39,17 @@ public class Main {
 //		s1.velocity.y 	= 5f;
 //		s1.angMom		= -200f;
 		
+		for (int i = 0; i < 4; i++) {
+			Vector2f[] vertices = new Vector2f[3];
+			for (int j = 0; j < 3; j++) {
+				float angle = (float) j / 3 * (float) Math.PI * 2;
+				Vector2f normal = new Vector2f((float) Math.cos(angle), (float) Math.sin(angle));
+				vertices[j] = (Vector2f) normal.scale((float) Math.random());
+			}
+			Shape s = new ShapePolygon(-10 + 5 * i, 0, 3, vertices);
+			World.addBody(s);
+		}
+		
 		World.addBody(s0);
 		World.addBody(s1);
 		
@@ -45,12 +57,16 @@ public class Main {
 	}
 	
 	private void tick(double delta) {
+		World.tick(delta);
+		
 		for (int i = 0; i < World.bodies.size(); i++) {
 			Shape s = World.bodies.get(i);
 			Vector2f vec = s.getVertex(0);
-			if (s.getVertexInWorld(0).length() > 2) {
-				s.addForce(new Vector2f((float) (-s.getVertexInWorld(0).x * 15 * delta), 
-						(float) (-s.getVertexInWorld(0).y * 15 * delta)), 
+			Vector2f rope = s.getVertexInWorld(0);
+			if (rope.length() > 2) {
+				sub(rope, (Vector2f) rope.normalise(null).scale(2), rope);
+				System.out.println(rope);
+				s.addForce((Vector2f) rope.scale((float) delta * -15), 
 						new Vector2f(vec.x, vec.y));
 			}
 		}
@@ -60,8 +76,6 @@ public class Main {
 			s.addForce(new Vector2f(Mouse.getDX() / 10f, Mouse.getDY() / 10f), 
 						s.getVertex(0));
 		}*/
-		
-		World.tick(delta);
 	}
 	
 	private void render() {

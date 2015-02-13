@@ -35,15 +35,6 @@ public class Shape {
 	}
 
 	public void tick(double delta) {
-		if (normals == null) {
-			normals = new Vector2f[vertices.length];
-			for (int i = 0; i < vertices.length; i++) {
-				Vector2f edge = new Vector2f(0, 0);
-				edge.x = vertices[(i + 1) % vertices.length].x - vertices[i].x;
-				edge.y = vertices[(i + 1) % vertices.length].y - vertices[i].y;
-				normals[i] = getEdgeNormal(edge);
-			}
-		}
 		lastPos.x = origin.x;
 		lastPos.y = origin.y;
 		lastRot   = rotation;
@@ -87,6 +78,18 @@ public class Shape {
 		double tempRot = rotation;
 		rotation = lastRot;
 		lastRot = tempRot;
+	}
+	
+	public void checkNormals() {
+		if (normals == null) {
+			normals = new Vector2f[vertices.length];
+			for (int i = 0; i < vertices.length; i++) {
+				Vector2f edge = new Vector2f(0, 0);
+				edge.x = vertices[(i + 1) % vertices.length].x - vertices[i].x;
+				edge.y = vertices[(i + 1) % vertices.length].y - vertices[i].y;
+				normals[i] = getEdgeNormal(edge);
+			}
+		}
 	}
 	
 	public Vector2f getVertexInWorld(int i) {

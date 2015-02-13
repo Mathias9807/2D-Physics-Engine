@@ -14,7 +14,7 @@ public class World {
 	
 	public static final double 	GRAVITY_PULL 	= 9.8;
 	public static final double 	DAMP 			= 0.1f;
-	public static final double 	ROT_DAMP 		= 0.1f;
+	public static final double 	ROT_DAMP 		= 0.5f;
 	
 	private static boolean 		useGravity 		= false;
 	
@@ -31,6 +31,7 @@ public class World {
 		Main.running = true;
 		for (int i = 0; i < bodies.size(); i++) {
 			Shape s = bodies.get(i);
+			s.checkNormals();
 			
 			if (useGravity) s.addForce(new Vector2f(0, (float) (-GRAVITY_PULL * delta * s.mass)), 
 					new Vector2f(0, 0));
